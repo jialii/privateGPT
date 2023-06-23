@@ -20,6 +20,8 @@ Copy the `example.env` template into `.env`
 cp example.env .env
 ```
 
+Then for running Falcon via HuggingFace API, set MODEL_TYPE=Falcon in .env file
+
 and edit the variables appropriately in the `.env` file.
 ```
 MODEL_TYPE: supports LlamaCpp or GPT4All
