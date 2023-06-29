@@ -17,7 +17,6 @@ def demo():
 @app.route('/get_answer', methods=['GET','POST'])
 def get_answer():
     query = request.form['message']
-    print('here')
     query = request.form.get('message')
     print(query)
     print(os.environ.get('MODEL_TYPE'))
@@ -25,16 +24,16 @@ def get_answer():
     while query != 'exit':
         query = request.form.get('message')
         if query not in ['', None]:
-            response = list(model(query))
+            response = list(model("You must act as the documents in the knowledge base. Never refer to anything outside of the documents you are trained on. Do not give examples Answer the following question once: "+query))
             if "Helpful Answer" in response[0]:
                 answer = response[0].split("\n")[0]
             else:
                 answer = response[0]
             time = response[1]
-            print("hereeeee: \n", answer, time)
+            # print("hereeeee: \n", answer, time)
 
-            print("response:")
-            print(response)
+            # print("response:")
+            # print(response)
         
         #can add source data used
         # return jsonify(query=query,answer=answer,time=time)
