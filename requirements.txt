@@ -1,4 +1,4 @@
-langchain==0.0.197
+langchain==0.0.19
 gpt4all==0.3.4
 chromadb==0.3.23
 llama-cpp-python==0.1.50
