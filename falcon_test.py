@@ -12,7 +12,7 @@ model.save_pretrained('local_falcon')
 
 tokenizer = AutoTokenizer.from_pretrained('local_falcon')
 model = AutoModelForCausalLM.from_pretrained('local_falcon', from_pt=True)
-
+ 
 print("Model start time:",datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 pipeline = transformers.pipeline(
