@@ -172,7 +172,7 @@ def main():
             llm = GPT4All(model=model_path, n_ctx=model_n_ctx, backend='gptj', n_batch=model_n_batch, callbacks=callbacks, verbose=False)
         case "Falcon":
             llm = HuggingFaceEndpoint(
-                huggingfacehub_api_token=os.environ.get(""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""),
+                huggingfacehub_api_token=os.environ.get("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"),
                 endpoint_url= "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct" ,
                 # huggingfacehub_api_token=HUGGINGFACE_API_KEY,
                 task="text-generation",
