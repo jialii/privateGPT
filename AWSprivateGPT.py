@@ -165,61 +165,61 @@ def main():
     # activate/deactivate the streaming StdOut callback for LLMs
     callbacks = [] if args.mute_stream else [StreamingStdOutCallbackHandler()]
     # Prepare the LLM
-    match model_type: 
-        case "LlamaCpp":
-            llm = LlamaCpp(model_path=model_path, n_ctx=model_n_ctx, n_batch=model_n_batch, callbacks=callbacks, verbose=False)
-        case "GPT4All":
-            llm = GPT4All(model=model_path, n_ctx=model_n_ctx, backend='gptj', n_batch=model_n_batch, callbacks=callbacks, verbose=False)
-        case "Falcon":
-            llm = HuggingFaceEndpoint(
-                huggingfacehub_api_token=os.environ.get("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"),
-                endpoint_url= "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct" ,
-                # huggingfacehub_api_token=HUGGINGFACE_API_KEY,
-                task="text-generation",
-                model_kwargs = {
-                    "min_length": 200,
-                    "max_length":2000,
-                    "temperature":0.5,
-                    "max_new_tokens":200,
-                    "num_return_sequences":1
-                },            
-        )
-        case "LocalFalcon":
-            # model_name = "tiiuae/falcon-7b-instruct"
-            # model = AutoModelForCausalLM.from_pretrained(model_name,trust_remote_code=True)
-
-            # tokenizer = AutoTokenizer.from_pretrained(model_name)
-            # tokenizer.save_pretrained('local_falcon')
-
-            # model.save_pretrained('local_falcon')
-            model2 = AutoModelForCausalLM.from_pretrained('/Users/jiali.xu/Desktop/falcon-7b-instruct',trust_remote_code=True)
-            tokenizer2 = AutoTokenizer.from_pretrained('/Users/jiali.xu/Desktop/falcon-7b-instruct')
+    # match model_type: 
+    #     case "LlamaCpp":
+    #         llm = LlamaCpp(model_path=model_path, n_ctx=model_n_ctx, n_batch=model_n_batch, callbacks=callbacks, verbose=False)
+    #     case "GPT4All":
+    #         llm = GPT4All(model=model_path, n_ctx=model_n_ctx, backend='gptj', n_batch=model_n_batch, callbacks=callbacks, verbose=False)
+    if model_type =="Falcon":
+        llm = HuggingFaceEndpoint(
+            huggingfacehub_api_token=os.environ.get("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"),
+            endpoint_url= "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct" ,
+            # huggingfacehub_api_token=HUGGINGFACE_API_KEY,
+            task="text-generation",
             model_kwargs = {
-                    "min_length": 200,
-                    "max_length":2000,
-                    "temperature":0.5,
-                    "max_new_tokens":200,
-                    "num_return_sequences":1
-            }
-            pipeline = transformers.pipeline(
-                "text-generation",
-                model=model2,
-                tokenizer=tokenizer2,
-                torch_dtype=torch.bfloat16,
-                trust_remote_code=True,
-                device_map="auto",
-                max_new_tokens=500
-            )
+                "min_length": 200,
+                "max_length":2000,
+                "temperature":0.5,
+                "max_new_tokens":200,
+                "num_return_sequences":1
+            },            
+    )
+        # case "LocalFalcon":
+        #     # model_name = "tiiuae/falcon-7b-instruct"
+        #     # model = AutoModelForCausalLM.from_pretrained(model_name,trust_remote_code=True)
 
-            llm = HuggingFacePipeline(pipeline=pipeline)
+        #     # tokenizer = AutoTokenizer.from_pretrained(model_name)
+        #     # tokenizer.save_pretrained('local_falcon')
 
-        case "TheBloke":
-            model_id = "TheBloke/WizardLM-7B-uncensored-GPTQ"
-            model_basename = "WizardLM-7B-uncensored-GPTQ-4bit-128g.compat.no-act-order.safetensors"
-            llm = load_model("cpu", model_id=model_id, model_basename=model_basename)
-        case _default:
-            # raise exception if model_type is not supported
-            raise Exception(f"Model type {model_type} is not supported. Please choose one of the following: LlamaCpp, GPT4All")
+        #     # model.save_pretrained('local_falcon')
+        #     model2 = AutoModelForCausalLM.from_pretrained('/Users/jiali.xu/Desktop/falcon-7b-instruct',trust_remote_code=True)
+        #     tokenizer2 = AutoTokenizer.from_pretrained('/Users/jiali.xu/Desktop/falcon-7b-instruct')
+        #     model_kwargs = {
+        #             "min_length": 200,
+        #             "max_length":2000,
+        #             "temperature":0.5,
+        #             "max_new_tokens":200,
+        #             "num_return_sequences":1
+        #     }
+        #     pipeline = transformers.pipeline(
+        #         "text-generation",
+        #         model=model2,
+        #         tokenizer=tokenizer2,
+        #         torch_dtype=torch.bfloat16,
+        #         trust_remote_code=True,
+        #         device_map="auto",
+        #         max_new_tokens=500
+        #     )
+
+        #     llm = HuggingFacePipeline(pipeline=pipeline)
+
+        # case "TheBloke":
+        #     model_id = "TheBloke/WizardLM-7B-uncensored-GPTQ"
+        #     model_basename = "WizardLM-7B-uncensored-GPTQ-4bit-128g.compat.no-act-order.safetensors"
+        #     llm = load_model("cpu", model_id=model_id, model_basename=model_basename)
+        # case _default:
+        #     # raise exception if model_type is not supported
+        #     raise Exception(f"Model type {model_type} is not supported. Please choose one of the following: LlamaCpp, GPT4All")
         
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever, return_source_documents= not args.hide_source)
     # Interactive questions and answers
