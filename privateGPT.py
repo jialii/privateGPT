@@ -5,7 +5,6 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.vectorstores import Chroma
 from langchain.llms import GPT4All, LlamaCpp, HuggingFaceEndpoint, HuggingFacePipeline
-from nomic.gpt4all import GPT4AllGPU
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
