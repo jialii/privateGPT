@@ -36,6 +36,7 @@ model_path = os.environ.get('MODEL_PATH')
 model_n_ctx = os.environ.get('MODEL_N_CTX')
 model_n_batch = int(os.environ.get('MODEL_N_BATCH',8))
 target_source_chunks = int(os.environ.get('TARGET_SOURCE_CHUNKS',4))
+os.environ['CURL_CA_BUNDLE'] = ''
 
 from constants import CHROMA_SETTINGS
 
