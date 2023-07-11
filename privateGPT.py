@@ -37,6 +37,8 @@ model_n_ctx = os.environ.get('MODEL_N_CTX')
 model_n_batch = int(os.environ.get('MODEL_N_BATCH',8))
 target_source_chunks = int(os.environ.get('TARGET_SOURCE_CHUNKS',4))
 os.environ['CURL_CA_BUNDLE'] = ''
+os.environ['HTTP_PROXY'] = 'http://proxy_url:proxy_port'
+os.environ['HTTPS_PROXY'] = 'http://proxy_url:proxy_port'
 
 from constants import CHROMA_SETTINGS
 
@@ -184,15 +186,15 @@ def main():
                 },            
         )
         case "LocalFalcon":
-            # model_name = "tiiuae/falcon-7b-instruct"
-            # model = AutoModelForCausalLM.from_pretrained(model_name,trust_remote_code=True)
+            model_name = "tiiuae/falcon-7b-instruct"
+            model = AutoModelForCausalLM.from_pretrained(model_name,trust_remote_code=True)
 
-            # tokenizer = AutoTokenizer.from_pretrained(model_name)
-            # tokenizer.save_pretrained('local_falcon')
+            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            tokenizer.save_pretrained('local_falcon')
 
-            # model.save_pretrained('local_falcon')
-            model2 = AutoModelForCausalLM.from_pretrained('/Users/jiali.xu/Desktop/falcon-7b-instruct',trust_remote_code=True)
-            tokenizer2 = AutoTokenizer.from_pretrained('/Users/jiali.xu/Desktop/falcon-7b-instruct')
+            model.save_pretrained('local_falcon')
+            model2 = AutoModelForCausalLM.from_pretrained('local_falcon',trust_remote_code=True)
+            tokenizer2 = AutoTokenizer.from_pretrained('local_falcon')
             model_kwargs = {
                     "min_length": 200,
                     "max_length":2000,
